@@ -20,51 +20,70 @@ class MainWindow : public QMainWindow
 public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
+
+protected:
+    void ReadFile(QString t_FileName);
+    void WriteFile(QString t_FileName,QJsonObject t_Json);
+
+    //Json操作函数
     void JsonInsert(QString Name,QString Path,QString Set,int Time);
+    void CreateJson(QTableWidget *Cur_Twg);
     void UserJsonInsert(QString ObjName);
-    void CreateJson();
+
+    void SaveAll();
+    void SaveUserSet(QListWidgetItem *current, QListWidgetItem *previous);
+
+    void ResJson(QJsonObject object,QTableWidget *twg);
+    void ReadJson();
+    void ReadUserJson(QListWidgetItem *current = nullptr);
+
+    //tablewidget操作函数
     void RstTbv();
     void Tbvaddline(QTableWidget *twg,QString Name,QString Path,QString Set,int Time);
-    void ReadJson();
-    void RemoveSet();
-    void SaveUserSet(QListWidgetItem *previous);
-    void ReadUserJson(QListWidgetItem *current = nullptr);
-    void SaveAll();
+    void ItemSwap(int differ);
     void ItemUp();
     void ItemDown();
-    void AppRun();
-    int Line_exist(QString Name);
-    int Line_exist(QTableWidget *twg,QString Name,QString Path);
 
-public slots:
+    //应用启动函数
+    void AppRun();
+
+    //唯一性判断函数
+    int Line_exist(QString Name,QString Path = "",QTableWidget *twg = nullptr);
+
+    //拖拽事件对应函数
+    void dragEnterEvent(QDragEnterEvent *event);
+    void dropEvent(QDropEvent *event);
+
+private:
+    Ui::MainWindow *ui;
+
+    CCheckBoxHeaderView *myHeader;
+    CCheckBoxHeaderView *myUserHeader;
+
+    QTableWidget *Cur_Twg;
+
+    QMenu *m_contextMenu;
+    QAction *m_delAction;
+
+    QJsonDocument Doc;
+    QJsonObject Json;
+    QJsonObject UserJson;
+    QJsonArray NameArr;
+    QJsonArray PathArr;
+    QJsonArray SetArr;
+    QJsonArray TimeArr;
+
+    QString FileName;
+    QString UserFileName;
+
+private slots:
     void AddNew();
     void AddUserSet();
     void Delete();
     void DeleteUserSet();
     void ChangeCheckStatus(bool);
     void showListWidgetMenuSlot(QPoint pos);
-
-protected:
-    void dragEnterEvent(QDragEnterEvent *event);
-    void dropEvent(QDropEvent *event);
-
-private slots:
     void on_listWidget_currentItemChanged(QListWidgetItem *current, QListWidgetItem *previous);
 
-private:
-    Ui::MainWindow *ui;
-    QJsonObject json;
-    QJsonObject Userjson;
-    QJsonArray NameArr;
-    QJsonArray PathArr;
-    QJsonArray SetArr;
-    QJsonArray TimeArr;
-    QJsonDocument doc;
-    CCheckBoxHeaderView *myHeader;
-    CCheckBoxHeaderView *myUserHeader;
-    QString FileName;
-    QString UserFileName;
-    QMenu *m_contextMenu;
-    QAction *m_delAction;
 };
 #endif // MAINWINDOW_H
