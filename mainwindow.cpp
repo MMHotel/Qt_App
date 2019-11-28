@@ -451,7 +451,7 @@ void MainWindow::dragEnterEvent(QDragEnterEvent *event)
 //拖拽事件处理函数
 void MainWindow::dropEvent(QDropEvent *event)
 {
-
+    int count = ui->listWidget->count();
     QList<QUrl> urls = event->mimeData()->urls();
     if(urls.isEmpty())
         return;
@@ -492,6 +492,7 @@ void MainWindow::dropEvent(QDropEvent *event)
             }
         }
     }
+    SaveUserSet(ui->listWidget->item(count-1),nullptr);
     SaveAll();
 }
 
@@ -502,6 +503,7 @@ void MainWindow::AddNew()
     QString dlgTitle = "选择一个文件";
     QString filter = "程序文件(*.lnk *.exe)";
     QString aFileName = QFileDialog::getOpenFileName(this,dlgTitle,curPath,filter);
+    int count = ui->listWidget->count();
     if(aFileName!="")
     {
         QFileInfo fileinfo(aFileName);
@@ -520,6 +522,7 @@ void MainWindow::AddNew()
         }
 
     }
+    SaveUserSet(ui->listWidget->item(count-1),nullptr);
     SaveAll();
 }
 
