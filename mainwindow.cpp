@@ -19,7 +19,9 @@ MainWindow::MainWindow(QWidget *parent)
     FileName = cur_Path + "/data.json";
     UserFileName = cur_Path + "/user.json";
 
+    //设置主界面大小无法改变
     setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
+    setFixedSize(this->width(), this->height());
 
     RstTbv();
     ReadJson();
