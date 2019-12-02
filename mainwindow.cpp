@@ -3,6 +3,7 @@
 #include <QDebug>
 #include <QDir>
 #include <QTimer>
+#include <QtWin>
 #include <QFileInfo>
 #include <QFileDialog>
 #include <QMessageBox>
@@ -14,6 +15,8 @@ MainWindow::MainWindow(QWidget *parent)
     , ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+
+    setWindowIcon(QIcon(":/myico.ico"));
 
     QString cur_Path = QDir::currentPath();
     FileName = cur_Path + "/data.json";
@@ -28,7 +31,7 @@ MainWindow::MainWindow(QWidget *parent)
 
     ReadUserJson();
     if(ui->listWidget->count()>0)
-        ui->listWidget->item(0)->setSelected(true);
+        ui->listWidget->setCurrentRow(0);
     ui->tabWidget->setCurrentIndex(0);
 
     this->setAcceptDrops(true);
@@ -365,6 +368,15 @@ void MainWindow::ItemSwap(int differ)
             twg->setItem(row+differ,i,new QTableWidgetItem(twg->item(row,i)->icon(),bottom_t));
             twg->setItem(row,i,new QTableWidgetItem(icon,up_t));
         }
+        twg->selectRow(row+differ);
+    }
+    if(ui->tabWidget->currentIndex()==0)
+    {
+        SaveAll();
+    }
+    else
+    {
+        SaveUserSet(ui->listWidget->currentItem(),nullptr);
     }
 }
 
