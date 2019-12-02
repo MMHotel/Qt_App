@@ -1,4 +1,4 @@
-QT       += core gui
+QT       += core gui winextras
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -31,4 +31,7 @@ qnx: target.path = /tmp/$${TARGET}/bin
 else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
 
-RC_ICONS = myico.ico
+RC_FILE += myVersion.rc
+
+RESOURCES += \
+    image.qrc
