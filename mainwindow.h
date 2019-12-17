@@ -47,6 +47,9 @@ protected:
     //应用启动函数
     void AppRun();
 
+    //休眠函数
+    void Sleep(int time);
+
     //唯一性判断函数
     int Line_exist(QString Name,QString Path = "",QTableWidget *twg = nullptr);
 

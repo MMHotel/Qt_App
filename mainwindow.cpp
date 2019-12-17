@@ -59,6 +59,8 @@ MainWindow::MainWindow(QWidget *parent)
 
 MainWindow::~MainWindow()
 {
+    SaveAll();
+    SaveUserSet(ui->listWidget->currentItem(),nullptr);
     delete ui;
 }
 
@@ -354,7 +356,7 @@ void MainWindow::ItemSwap(int differ)
     {
         return;
     }
-    else if(row == twg->rowCount() && differ == 1)
+    else if(row == twg->rowCount()-1 && differ == 1)
     {
         return;
     }
@@ -396,7 +398,7 @@ void MainWindow::AppRun()
     QProcess process;
     QString str;
     QTableWidget *twg;
-    int time;
+    int time,k=0;
     if(ui->tabWidget->currentIndex()==0)
     {
         twg = ui->tableWidget;
@@ -409,6 +411,11 @@ void MainWindow::AppRun()
     {
         if(twg->item(i,0)->checkState() == Qt::Checked)
         {
+            if(k>0)
+            {
+                time = twg->item(i,4)->text().toInt();
+                Sleep(time);
+            }
             str = twg->item(i,2)->text();
             if(twg->item(i,3)->text()!="")
             {
@@ -417,13 +424,19 @@ void MainWindow::AppRun()
             }
             str.replace(" ","\" \"");
             process.startDetached(str);
-            QEventLoop eventloop;
-            time = twg->item(i,4)->text().toInt();
-            QTimer::singleShot(time*100, &eventloop, SLOT(quit()));
-            eventloop.exec();
+            k++;
         }
     }
 
+}
+
+void MainWindow::Sleep(int time)
+{
+    QTime Later_Time = QTime::currentTime().addMSecs(time);
+    while(QTime::currentTime() < Later_Time)
+    {
+        QCoreApplication::processEvents(QEventLoop::AllEvents,100);
+    }
 }
 
 int MainWindow::Line_exist(QString Name,QString Path,QTableWidget *twg)
